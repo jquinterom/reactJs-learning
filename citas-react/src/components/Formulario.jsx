@@ -1,102 +1,155 @@
-function Formulario() {
-    return (
-        <div className="md:w-1/2 lg:w-2/5">
-            <h2 className="font-black text-3xl text-center">
-                Segumiento Pacientes
-            </h2>
+import { useState, useEffect } from "react";
 
-            <p className="text-lg mt-5 text-center mb-10">
-                Añade Pacientes y {''}
-                <span className="text-indigo-600 font-bold ">Administralos</span>
-            </p>
+function Formulario({ pacientes, setPacientes }) {
+  // Hooks
+  const [nombre, setNombre] = useState("");
+  const [propietario, setPropietario] = useState("");
+  const [email, setEmail] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [sintomas, setSintomas] = useState("");
+  const [error, setError] = useState(false);
 
-            <form
-                action=""
-                className="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
-            >
-                <div className="mb-5">
-                    <label
-                        htmlFor="mascota"
-                        className="block text-gray-700 uppercase font-bold"
+  // Event for submit form
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-                    >
-                        Nombre Mascota
-                    </label>
-                    <input
-                        id="mascota"
-                        type="text"
-                        placeholder="Nombre de la mascota"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" />
-                </div>
+    // Validate form
+    if ([nombre, propietario, email, fecha, sintomas].includes("")) {
+      setError(true);
+      return;
+    }
 
-                <div className="mb-5">
-                    <label
-                        htmlFor="propietario"
-                        className="block text-gray-700 uppercase font-bold"
+    setError(false);
 
-                    >
-                        Nombre Propietario
-                    </label>
-                    <input
-                        id="propietario"
-                        type="text"
-                        placeholder="Nombre del propietario"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" />
-                </div>
+    // Object's patient
+    const objetoPaciente = {
+      nombre,
+      propietario,
+      email,
+      fecha,
+      sintomas,
+    };
 
-                <div className="mb-5">
-                    <label
-                        htmlFor="email"
-                        className="block text-gray-700 uppercase font-bold"
+    setPacientes([...pacientes, objetoPaciente]);
 
-                    >
-                        Email
-                    </label>
-                    <input
-                        id="email"
-                        type="email"
-                        placeholder="Email Contacto Propietario"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" />
-                </div>
+    // Restar form
+    setNombre("");
+    setPropietario("");
+    setEmail("");
+    setFecha("");
+    setSintomas("");
+  };
 
-                <div className="mb-5">
-                    <label
-                        htmlFor="alta"
-                        className="block text-gray-700 uppercase font-bold"
+  return (
+    <div className="md:w-1/2 lg:w-2/5">
+      <h2 className="font-black text-3xl text-center">Segumiento Pacientes</h2>
 
-                    >
-                        Alta
-                    </label>
-                    <input
-                        id="alta"
-                        type="date"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" />
-                </div>
+      <p className="text-lg mt-5 text-center mb-10">
+        Añade Pacientes y {""}
+        <span className="text-indigo-600 font-bold ">Administralos</span>
+      </p>
 
-                <div className="mb-5">
-                    <label
-                        htmlFor="sitomas"
-                        className="block text-gray-700 uppercase font-bold"
-
-                    >
-                        Síntomas
-                    </label>
-                    <textarea
-                        id="sintomas"
-                        className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                        placeholder="Describe los síntomas"
-                    />
-                </div>
-
-                <input
-                    type="submit"
-                    className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
-                    value="Agregar Paciente"
-                />
-            </form>
-
+      <form
+        onSubmit={handleSubmit}
+        action=""
+        className="bg-white shadow-md rounded-lg py-10 px-5 mb-10 mx-5"
+      >
+        {error && (
+          <div className="bg-red-700 text-white text-center p-3 uppercase font-bold mb-3 rounded-md">
+            <p>Todos los campos son obligatorios</p>
+          </div>
+        )}
+        <div className="mb-5">
+          <label
+            htmlFor="mascota"
+            className="block text-gray-700 uppercase font-bold"
+          >
+            Nombre Mascota
+          </label>
+          <input
+            id="mascota"
+            type="text"
+            placeholder="Nombre de la mascota"
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
         </div>
-    )
+
+        <div className="mb-5">
+          <label
+            htmlFor="propietario"
+            className="block text-gray-700 uppercase font-bold"
+          >
+            Nombre Propietario
+          </label>
+          <input
+            id="propietario"
+            type="text"
+            placeholder="Nombre del propietario"
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+            value={propietario}
+            onChange={(e) => setPropietario(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 uppercase font-bold"
+          >
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            placeholder="Email Contacto Propietario"
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="alta"
+            className="block text-gray-700 uppercase font-bold"
+          >
+            Alta
+          </label>
+          <input
+            id="alta"
+            type="date"
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+            value={fecha}
+            onChange={(e) => setFecha(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="sitomas"
+            className="block text-gray-700 uppercase font-bold"
+          >
+            Síntomas
+          </label>
+          <textarea
+            id="sintomas"
+            className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+            placeholder="Describe los síntomas"
+            value={sintomas}
+            onChange={(e) => setSintomas(e.target.value)}
+          />
+        </div>
+
+        <input
+          type="submit"
+          className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
+          value="Agregar Paciente"
+        />
+      </form>
+    </div>
+  );
 }
 
-export default Formulario
+export default Formulario;
