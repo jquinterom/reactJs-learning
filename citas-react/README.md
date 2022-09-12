@@ -11,7 +11,7 @@ npm run build
 You can use Netlify site for deploy your application.
 
 
-## Technologies:
+## Technologies
 - [React](https://es.reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
