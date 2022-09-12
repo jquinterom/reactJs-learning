@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Error from "./Error";
 
-function Formulario({ pacientes, setPacientes }) {
+function Formulario({ pacientes, setPacientes, paciente, setPaciente }) {
   // Hooks
   const [nombre, setNombre] = useState("");
   const [propietario, setPropietario] = useState("");
@@ -9,6 +9,23 @@ function Formulario({ pacientes, setPacientes }) {
   const [fecha, setFecha] = useState("");
   const [sintomas, setSintomas] = useState("");
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(paciente).length > 0) {
+      setNombre(paciente.nombre);
+      setPropietario(paciente.propietario);
+      setEmail(paciente.email);
+      setFecha(paciente.fecha);
+      setSintomas(paciente.sintomas);
+    }
+  }, [paciente]);
+
+  const generarId = () => {
+    const random = Math.random().toString(35).substring(2);
+    const fecha = Date.now().toString(36);
+
+    return fecha + random;
+  };
 
   // Event for submit form
   const handleSubmit = (e) => {
@@ -31,7 +48,21 @@ function Formulario({ pacientes, setPacientes }) {
       sintomas,
     };
 
-    setPacientes([...pacientes, objetoPaciente]);
+    // Validate if registing or editing
+    if (paciente.id) {
+      // Editing record
+      objetoPaciente.id = paciente.id;
+      const pacientesActualizados = pacientes.map((pacienteState) =>
+        pacienteState.id === paciente.id ? objetoPaciente : pacienteState
+      );
+
+      setPacientes(pacientesActualizados);
+      setPaciente({});
+    } else {
+      // New record
+      objetoPaciente.id = generarId();
+      setPacientes([...pacientes, objetoPaciente]);
+    }
 
     // Restar form
     setNombre("");
@@ -146,7 +177,7 @@ function Formulario({ pacientes, setPacientes }) {
         <input
           type="submit"
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
-          value="Agregar Paciente"
+          value={paciente.id ? "Editar Paciente" : "Agregar Paciente"}
         />
       </form>
     </div>
